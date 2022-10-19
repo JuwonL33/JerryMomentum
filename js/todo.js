@@ -13,12 +13,16 @@ function saveToDos(){
 function deleteTodo(event){
     const li = event.target.parentElement;
     li.remove();
+    toDos = toDos.filter(toDo => toDo.id !== parseInt(li.id));
+    saveToDos();                          // 아이템을 삭제한 뒤 리스트를 업데이트 하기
 }
+
 
 function paintToDo(newToDo){
     const li = document.createElement("li");
+    li.id = newToDo.id;
     const span = document.createElement("span");
-    span.innerText = newToDo;
+    span.innerText = newToDo.text;
     const button = document.createElement("button");
     button.innerText = "❌";
     button.addEventListener("click", deleteTodo);
@@ -31,8 +35,12 @@ function handleToDoSubmit(event){
     event.preventDefault();
     const newToDo = toDoInput.value;
     toDoInput.value = "";
-    toDos.push(newToDo);                    // localStorage에는 오로지 string만 집어넣을 수 있음
-    paintToDo(newToDo);
+    const newTodoObj = {
+        text:newToDo,
+        id: Date.now(),
+    };
+    toDos.push(newTodoObj);                    // localStorage에는 오로지 string만 집어넣을 수 있음
+    paintToDo(newTodoObj);
     saveToDos();
 }
 
@@ -53,3 +61,17 @@ if(savedToDos){
      *  }
      */
 }
+
+
+/*
+ * array에서 뭔가를 remove 한다는 것은
+ * 뭔갈 삭제하는게 아니라, 제거 하고자 하는 아이템을 빼고 새로운 array를 만든다는 의미
+ */ 
+function sexyFilter(){
+
+}
+
+/*
+ * filter 함수는 반드시 true를 리턴해야함. 
+ * filter 함수를 태운 리스트를 그대로 유지하고 싶다면 반드시 true를 리턴해야 함. 
+ */
